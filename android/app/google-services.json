@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "217730760033",
+    "project_id": "my-radio-e395b",
+    "storage_bucket": "my-radio-e395b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217730760033:android:745ef62c66bd861d2e9920",
+        "android_client_info": {
+          "package_name": "com.example.final_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg5EeGkCSvio0_Lk0Zk0nDrVncFbdIfBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217730760033:android:b4e407174ab1ea292e9920",
+        "android_client_info": {
+          "package_name": "com.example.my_market"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg5EeGkCSvio0_Lk0Zk0nDrVncFbdIfBk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
