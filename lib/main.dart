@@ -1,39 +1,61 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_market/add_product.dart';
 import 'package:my_market/admin_login.dart';
 import 'package:my_market/botom_navigator.dart';
 import 'package:my_market/oder_tracking.dart';
-import 'package:my_market/oders_list.dart';
-
-
+import 'package:my_market/stock_update.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
+
 
 void main()async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp( MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: Bottom(),
-  ));
+  runApp(Count());
 }
 
+
+class Count extends StatefulWidget {
+  const Count({super.key});
+
+  @override
+  State<Count> createState() => _CountState();
+}
+
+class _CountState extends State<Count> {
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(providers: [
+      ChangeNotifierProvider(create: (context)=>CounterProvider()),
+    ],
+    child:   MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Bottom(),
+
+
+      routes: {
+        "items" : (context)=> const Tracking(),
+
+      },
+
+
+    ),
+
+    );
+  }
+}
+
+
+
 final CollectionReference credential =  FirebaseFirestore.instance.collection("Users");
+final CollectionReference oder = FirebaseFirestore.instance.collection("Oders");
 
 
 class MyApp extends StatefulWidget {
-
-
-
-
   const MyApp({super.key});
-
-
-
-
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -41,64 +63,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
-  List sale = [
-    "Total Sales",
-    "Oders",
-    "Users",
-    "Products",
-
-  ];
-
-
-  List user = [
-    "Mark Luther",
-    "Alex Joby",
-    "Renjith NS",
-    "Gauthom Sumeer",
-    "Mark Luther",
-    "Alex Joby",
-    "Renjith NS",
-    "Gauthom Sumeer",
-    "Mark Luther",
-    "Alex Joby",
-    "Renjith NS",
-    "Gauthom Sumeer",
-    "Mark Luther",
-    "Alex Joby",
-    "Renjith NS",
-    "Gauthom Sumeer",
-
-  ];
-  List gmail = [
-    "MarkLuther123@gmail.com",
-    "AlexJoby345@gmail.com",
-    "RenjithNS678@gmail.com",
-    "GauthomSumeer042@gmail.com",
-    "MarkLuther123@gmail.com",
-    "AlexJoby345@gmail.com",
-    "RenjithNS678@gmail.com",
-    "GauthomSumeer042@gmail.com",
-    "MarkLuther123@gmail.com",
-    "AlexJoby345@gmail.com",
-    "RenjithNS678@gmail.com",
-    "GauthomSumeer042@gmail.com",
-    "MarkLuther123@gmail.com",
-    "AlexJoby345@gmail.com",
-    "RenjithNS678@gmail.com",
-    "GauthomSumeer042@gmail.com",
-
-
-  ];
-
-
-
-  List  values = [
-    "Rs - 43,200",
-    "500",
-    "1000",
-    "50",
-
-  ];
 
   Future Signout()async{
 
@@ -144,6 +108,7 @@ class _MyAppState extends State<MyApp> {
           stream: credential.snapshots(),
           builder: (context, snapshot) {
             if(snapshot.hasData) {
+              int userCount = snapshot.data!.docs.length;
               return Container(
                 width: 999,
                 height: 600,
@@ -160,7 +125,7 @@ class _MyAppState extends State<MyApp> {
                             color: Colors.blue,),
                           title: Text("Users",
                             style: TextStyle(color: Colors.black),),
-                          trailing: Text("300",
+                          trailing: Text(userCount.toString(),
                             style: TextStyle(
                                 color: Colors.black
                             ),),
@@ -184,7 +149,7 @@ class _MyAppState extends State<MyApp> {
                                   ),
                                   title: Text(snap["Name"],
                                     style: TextStyle(color: Colors.black),),
-                                  subtitle: Text(snap["gmail"],
+                                  subtitle: Text(snap["email"],
                                     style: TextStyle(
                                         color: Colors.black
                                     ),),

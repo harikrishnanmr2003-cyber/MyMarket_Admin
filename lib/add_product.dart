@@ -1,12 +1,6 @@
-
-
-
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart ' as firebase_storage;
@@ -30,9 +24,14 @@ class _NewProductState extends State<NewProduct> {
     "Xl",
 
   ];
-  List  image = [];
 
-  Future imageUplode(File path)async{
+  List<String> image = [];
+  List<String> wishProductIds = [];
+
+  bool hasSize = false;
+
+
+  Future imageUploded(File path)async{
     final  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
     DateTime now = DateTime.now();
     String timestamp = now.microsecondsSinceEpoch.toString();
@@ -45,19 +44,14 @@ class _NewProductState extends State<NewProduct> {
     });
   }
 
-
-
   TextEditingController name = TextEditingController();
   TextEditingController disc = TextEditingController();
   TextEditingController size = TextEditingController();
   TextEditingController price = TextEditingController();
   TextEditingController catgry = TextEditingController();
   TextEditingController stk = TextEditingController();
- //TextEditingController cnt = TextEditingController();
-
-
-
-
+  TextEditingController cnt = TextEditingController();
+  TextEditingController ID = TextEditingController();
 
   Future Adddata()async{
     final Data = {
@@ -68,18 +62,14 @@ class _NewProductState extends State<NewProduct> {
       "catogary" : catgry.text,
       "Image" : image,
       "Stock" : stk.text,
-
+      "ProductId" : ID.text,
+      "hasSize": hasSize,
 
 
     };
     await product.add(Data);
 
   }
-
-
-
-
-
 
  @override
   Widget build(BuildContext context) {
@@ -113,10 +103,6 @@ class _NewProductState extends State<NewProduct> {
                ),
                      ),
            ),
-
-
-
-
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: InkWell(
@@ -128,12 +114,11 @@ class _NewProductState extends State<NewProduct> {
                       }
                       else{
                         File path = File(pikeedimage.path);
-                        image = await imageUplode(path);
+                        image = await imageUploded(path);
                         setState(() {
 
                         });
                       }
-
                     },
                     child: Container(
                       color: Colors.grey.shade400,
@@ -145,7 +130,6 @@ class _NewProductState extends State<NewProduct> {
                     ),
                   ),
                 ),
-
 
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -172,10 +156,7 @@ class _NewProductState extends State<NewProduct> {
                 color: Colors.grey.shade200,
                 child:  TextField(
                   controller: name,
-
                   decoration: InputDecoration(
-
-
                     hintText: "Product name",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -209,12 +190,8 @@ class _NewProductState extends State<NewProduct> {
                 color: Colors.grey.shade200,
                 child:  TextField(
                   controller: disc,
-
                   decoration: InputDecoration(
-
-
                     hintText: "Product discription",
-
                   ),
                 ),
               ),
@@ -244,10 +221,7 @@ class _NewProductState extends State<NewProduct> {
                 color: Colors.grey.shade200,
                 child:  TextField(
                   controller: catgry,
-
                   decoration: InputDecoration(
-
-
                     hintText: "Product catogary",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -256,9 +230,6 @@ class _NewProductState extends State<NewProduct> {
                 ),
               ),
             ),
-
-
-
             Container(
               height: 60,
               width: 100,
@@ -300,63 +271,102 @@ class _NewProductState extends State<NewProduct> {
        Container(
          height: 100,
          width: 200,
-         child:  Row(
-           mainAxisAlignment: MainAxisAlignment.start,
-           crossAxisAlignment: CrossAxisAlignment.start,
-           children: [
-             Padding(
-               padding: const EdgeInsets.all(8.0),
-               child: Container(
-                 width: 150,
-                 height: 40,
-                 child: Padding(
-                   padding: const EdgeInsets.all(8.0),
-                   child: Text("Product Price",
-                     style: TextStyle(
-                         color: Colors.black
-                     ),),
+         child:  SizedBox(
+           width: 100,
+           child: Row(
+             mainAxisAlignment: MainAxisAlignment.start,
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+               Padding(
+                 padding: const EdgeInsets.all(8.0),
+                 child: Container(
+                   width: 115,
+                   height: 40,
+                   child: Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: Text("Product Price",
+                       style: TextStyle(
+                           color: Colors.black
+                       ),),
+                   ),
                  ),
                ),
-             ),
-             Container(
-                 width: 50,
-                 height: 40,
-                 color: Colors.grey.shade200,
-                 child: TextField(
-                   controller: price,
+               Container(
+                   width: 50,
+                   height: 40,
+                   color: Colors.grey.shade200,
+                   child: TextField(
+                     controller: price,
 
 
-                 )
-             ),
-             Padding(
-               padding: const EdgeInsets.all(8.0),
-               child: Container(
-                 width: 100,
-                 height: 40,
-                 child: Padding(
-                   padding: const EdgeInsets.all(8.0),
-                   child: Text("Stock",
-                     style: TextStyle(
-                         color: Colors.black
-                     ),),
+                   )
+               ),
+               Padding(
+                 padding: const EdgeInsets.all(8.0),
+                 child: Container(
+                   width: 100,
+                   height: 40,
+                   child: Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: Text("Stock",
+                       style: TextStyle(
+                           color: Colors.black
+                       ),),
+                   ),
                  ),
                ),
-             ),
-             Container(
-                 width: 50,
-                 height: 40,
-                 color: Colors.grey.shade200,
-                 child: TextField(
-                   controller: stk,
-
-
-                 )
-             ),
-
-           ],
+               Container(
+                   width: 30,
+                   height: 40,
+                   color: Colors.grey.shade200,
+                   child: TextField(
+                     controller: stk,
+                   )
+               ),
+             ],
+           ),
          ),
-
        ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 100,
+                  height: 40,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Product NO:",
+                      style: TextStyle(
+                          color: Colors.black
+                      ),),
+                  ),
+                ),
+                Container(
+                    width: 50,
+                    height: 40,
+                    color: Colors.grey.shade200,
+                    child: TextField(
+                      controller: ID,
+                    )
+                ),
+
+
+
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SwitchListTile(
+                title: const Text("Does this product have size?"),
+                value: hasSize,
+                onChanged: (value) {
+                  setState(() {
+                    hasSize = value;
+                  });
+                },
+              ),
+            ),
 
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -379,16 +389,11 @@ class _NewProductState extends State<NewProduct> {
                             ),)
                         )
                     );
-                    
                     setState(() {
                       Adddata();
                     });
                   }),
             )
-
-
-
-
         ]
         ),
       ) ,

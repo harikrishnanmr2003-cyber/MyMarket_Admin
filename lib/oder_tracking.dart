@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+
 class Tracking extends StatefulWidget {
   const Tracking({super.key});
 
@@ -10,8 +11,24 @@ class Tracking extends StatefulWidget {
 }
 
 class _TrackingState extends State<Tracking> {
+
+  DateTime today = DateTime.now();
+  void Selectedday(DateTime day,DateTime focusday){
+    setState(() {
+      today = day;
+    });
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+
+    final track = ModalRoute.of(context)!.settings.arguments as Map;
+    var odername = track["Name"];
+    var productimage = track["Image"];
+    var productprice = track["price"];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
@@ -27,25 +44,25 @@ class _TrackingState extends State<Tracking> {
         child: ListView(
           scrollDirection: Axis.vertical,
           children: [
-            Container(
-              width: 100,
-              height: 100,
-              color: Colors.grey,
-            ),
+            // Container(
+            //   width: 100,
+            //   height: 100,
+            //   color: Colors.grey,
+            // ),
             Container(
               width: 200,
               height: 60,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text("Canon EOS 1500D,\n"
-                    "Canon Camera",
+                child: Text(
+                 productimage[0].toString(),
 
                 style: TextStyle(
                   color: Colors.black
                 ),),
               ),
             ),
-            Padding(
+            Padding(                                                 //product name
               padding: const EdgeInsets.all(8.0),
               child: Text("Discription",style: TextStyle(
                 color: Colors.black,
@@ -54,15 +71,20 @@ class _TrackingState extends State<Tracking> {
             ),
             Container(
               width: 200,
-              height: 60,
-              child: Padding(
+              height: 100,
+              child: Padding(                                            // address
                 padding: const EdgeInsets.all(8.0),
-                child: Text("Canon EOS 1500D,\n"
-                    "Canon Camera,with high defenition lense for greate photography",
+                child: Text(odername,
                 style: TextStyle(
                   color: Colors.black
                 ),),
               ),
+            ),
+
+            Container(
+              width: 130,
+              height: 70,
+              color: Colors.grey,                                //payment
             ),
 
 
@@ -70,13 +92,44 @@ class _TrackingState extends State<Tracking> {
               width: 150,
               height: 50,
               child: ListTile(
-                title: Text("Ddelivery in 4 - dec 2025",
-                  style: TextStyle(
-                      color: Colors.green
-                  ),),
+                title:Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    " delivery date: ${today.day}-${today.month}-${today.year}",      // delivery date
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
                   trailing: IconButton(onPressed: (){
-
-
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return SizedBox(
+                            child: AlertDialog(
+                              content: SizedBox(
+                                height: 400,
+                                width: 300,
+                                child: TableCalendar(
+                                  focusedDay: today,
+                                  firstDay: DateTime.utc(2024, 1, 1),
+                                  lastDay: DateTime.utc(2040, 12, 31),
+                                  selectedDayPredicate: (day) =>
+                                      isSameDay(today, day),
+                                  onDaySelected: (selectedDay, focusedDay) {
+                                    setState(() {
+                                      today = selectedDay;
+                                    });
+                                    Navigator.pop(context); // close dialog
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      );
                   },
                       icon: Icon(Icons.calendar_month,
                       color: Colors.black,
@@ -84,18 +137,9 @@ class _TrackingState extends State<Tracking> {
 
                   ),
               )
-
             ),
-            Container(
-              width: 100,
-              height: 40,
 
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Oder tracking NO: 182495"),
-              ),
-            ),
-            Container(
+            Container(                                                                     // tracking status
               width: 150,
               height: 100,
               child: Row(
@@ -107,7 +151,7 @@ class _TrackingState extends State<Tracking> {
                     child: Container(
                       height: 50,
                       width: 100,
-                      color: Colors.green,
+                      color: Colors.green.shade300,
                       child: Center(
                         child: Text("Oder Placed",
                         style: TextStyle(
@@ -123,7 +167,7 @@ class _TrackingState extends State<Tracking> {
                         width: 100,
                         color: Colors.grey.shade200,
                         child: Center(
-                          child: Text("Shipped",
+                          child: Text("Packed",
                             style: TextStyle(
                                 color: Colors.black
                             ),),
@@ -137,7 +181,7 @@ class _TrackingState extends State<Tracking> {
                         width: 100,
                         color: Colors.grey.shade200,
                         child: Center(
-                          child: Text("out for delivery",
+                          child: Text("Shiped",
                             style: TextStyle(
                                 color: Colors.black
                             ),),
@@ -148,10 +192,10 @@ class _TrackingState extends State<Tracking> {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                         height: 50,
-                        width: 100,
+                        width: 140,
                         color: Colors.grey.shade200,
                         child: Center(
-                          child: Text("Delivered",
+                          child: Text("Out for Delivery",
                             style: TextStyle(
                                 color: Colors.black
                             ),),
@@ -188,7 +232,7 @@ class _TrackingState extends State<Tracking> {
                     //  color: Colors.red,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text("7999 ",
+                      child: Text( productprice,  // price
                         style: TextStyle(
                             color: Colors.black
                         ),),
@@ -233,78 +277,46 @@ class _TrackingState extends State<Tracking> {
                 )
               ],
             ),
+
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                Card(
+                  elevation: 15,
+                  shadowColor: Colors.black,
                   child: Container(
-                    width: 110,
-                    height: 35,
-                    // color: Colors.red,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("GST 2%",
-                        style: TextStyle(
-                            color: Colors.black
-                        ),),
-                    ),
+                    width: 200,
+                    height: 80,
+                    color: Colors.grey.shade200,
+                    child: Text("total amount "),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+
+                Card(
+                  elevation: 15,
+                  shadowColor: Colors.black,
                   child: Container(
-                    width: 110,
-                    height: 35,
-                    // color: Colors.red,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("gst ",
-                        style: TextStyle(
-                            color: Colors.black
-                        ),),
+                    color: Colors.grey.shade200,
+                    width: 100,
+                    height: 80,
+                    child: MaterialButton(
+                      color: Colors.blue.shade200,
+                      child: Text("Cancel oder",
+                      style: TextStyle(
+                        color: Colors.black
+                      ),),
+
+                        onPressed: (){}
                     ),
                   ),
                 )
               ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 110,
-                    height: 35,
-                    // color: Colors.red,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("Total Amount",
-                        style: TextStyle(
-                            color: Colors.black
-                        ),),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 110,
-                    height: 35,
-                    // color: Colors.red,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text("8110/-",
-                        style: TextStyle(
-                            color: Colors.black
-                        ),),
-                    ),
-                  ),
-                )
-              ],
-            ),
+            )
+
+
+
+
 
 
 
