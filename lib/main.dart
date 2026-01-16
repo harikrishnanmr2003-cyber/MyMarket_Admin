@@ -132,7 +132,7 @@ class _MyAppState extends State<MyApp> {
                         )
                     ),
                     SizedBox(
-                      height: 500,
+                      height: 510,
                       child: ListView.builder(
                           itemCount: snapshot.data!.docs.length,
                           scrollDirection: Axis.vertical,

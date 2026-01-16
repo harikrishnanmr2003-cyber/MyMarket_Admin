@@ -40,7 +40,7 @@ class _NewProductState extends State<NewProduct> {
     await task;
     String url = await reference.getDownloadURL();
     setState(() {
-      image=[url];
+      image.add(url);
     });
   }
 
@@ -51,7 +51,7 @@ class _NewProductState extends State<NewProduct> {
   TextEditingController catgry = TextEditingController();
   TextEditingController stk = TextEditingController();
   TextEditingController cnt = TextEditingController();
-  TextEditingController ID = TextEditingController();
+
 
   Future Adddata()async{
     final Data = {
@@ -62,7 +62,7 @@ class _NewProductState extends State<NewProduct> {
       "catogary" : catgry.text,
       "Image" : image,
       "Stock" : stk.text,
-      "ProductId" : ID.text,
+
       "hasSize": hasSize,
 
 
@@ -84,7 +84,7 @@ class _NewProductState extends State<NewProduct> {
         ),
       ),
       body: SizedBox(
-        height: 600,
+        height: 790,
         child: ListView(
           scrollDirection: Axis.vertical,
           children: [
@@ -114,7 +114,7 @@ class _NewProductState extends State<NewProduct> {
                       }
                       else{
                         File path = File(pikeedimage.path);
-                        image = await imageUploded(path);
+                         await imageUploded(path);
                         setState(() {
 
                         });
@@ -230,42 +230,32 @@ class _NewProductState extends State<NewProduct> {
                 ),
               ),
             ),
-            Container(
-              height: 60,
-              width: 100,
 
-              child: ListTile(
-                title: Text("size",style: TextStyle(
-                  color: Colors.black
-                ),),
-                subtitle: Text("out of stock",
-                style: TextStyle(
-                  color: Colors.red
-                ),),
-              ),
-            ),
-       Container(
-         width: 200,
-         height: 100,
-         child:DropdownButtonFormField<String>(
-           decoration: InputDecoration(
-             labelText: "Select Shoe Size",
-             border: OutlineInputBorder(),
-           ),
-           value: SelectedSize,
-           items: Size.map((e) {
-             return DropdownMenuItem(
-               value: e,
-               child: Text(e),
-             );
-           }).toList(),
-           onChanged: (value) {
-             setState(() {
-               SelectedSize = value!;
-             });
-           },
+       Padding(
+         padding: const EdgeInsets.all(8.0),
+         child: Container(
+           width: 200,
+           height: 100,
+           child:DropdownButtonFormField<String>(
+             decoration: InputDecoration(
+               labelText: "Select  Size",
+               border: OutlineInputBorder(),
+             ),
+             value: SelectedSize,
+             items: Size.map((e) {
+               return DropdownMenuItem(
+                 value: e,
+                 child: Text(e),
+               );
+             }).toList(),
+             onChanged: (value) {
+               setState(() {
+                 SelectedSize = value!;
+               });
+             },
 
-         )
+           )
+         ),
        ),
 
        Container(
@@ -327,34 +317,7 @@ class _NewProductState extends State<NewProduct> {
            ),
          ),
        ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 100,
-                  height: 40,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Product NO:",
-                      style: TextStyle(
-                          color: Colors.black
-                      ),),
-                  ),
-                ),
-                Container(
-                    width: 50,
-                    height: 40,
-                    color: Colors.grey.shade200,
-                    child: TextField(
-                      controller: ID,
-                    )
-                ),
 
-
-
-              ],
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: SwitchListTile(

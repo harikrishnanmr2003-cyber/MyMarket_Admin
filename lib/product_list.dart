@@ -40,6 +40,19 @@ class _ItemssState extends State<Itemss> {
     // final counter = Provider.of<CounterProvider>(context);
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add,
+          color: Colors.black,),
+
+          onPressed: (){
+
+            Navigator.push(context, MaterialPageRoute(builder: (
+
+                context) {
+              return NewProduct();
+            }));
+
+      }),
       appBar: AppBar(
         backgroundColor: Colors.indigo,
         title: Center(
@@ -57,41 +70,10 @@ class _ItemssState extends State<Itemss> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.search),
 
-                      hintText: "search",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: MaterialButton(
-                      color: Colors.blue.shade200,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text("Add Product",
-                          style: TextStyle(
-                              color: Colors.black
-                          ),),
-                      ),
-                      onPressed: () {
 
-                        Navigator.push(context, MaterialPageRoute(builder: (
-
-                            context) {
-                          return NewProduct();
-                        }));
-                      }),
-                ),
                 SizedBox(
-                  height: 650,
+                  height: 700,
                   child: ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       scrollDirection: Axis.vertical,
@@ -115,27 +97,41 @@ class _ItemssState extends State<Itemss> {
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text("Product Name -:"),
-                                            Text(snap["Name"])
-                                          ],
-                                        ),
-                                        TextField(
-                                          controller: stk,
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                            labelText: "Update Stock",
-                                            border: OutlineInputBorder(),
+                                        SizedBox(
+                                          width:100,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text("Product Name -:"),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Text(snap["Name"]),
+                                              )
+                                            ],
                                           ),
                                         ),
+
 
                                       ],
                                     )
                                   ),
                                   actions: [
+
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextField(
+                                        controller: stk,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          labelText: "Update Stock",
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                    ),
 
 
 
@@ -176,7 +172,58 @@ class _ItemssState extends State<Itemss> {
                             subtitle: Text(snap["discription"],
                               style: TextStyle(
                                   color: Colors.black
-                              ),),
+                              ),
+                            ),
+                            trailing: MaterialButton(
+                              color: Colors.blue.shade200,
+                                child: Text("Delete",
+                                style: TextStyle(
+                                  color: Colors.black
+                                ),),
+                                onPressed: (){
+                                showDialog(context: context, builder: (BuildContext){
+                                  return AlertDialog(
+                                    title: Icon(Icons.question_mark,
+                                    color: Colors.black,
+                                    ),
+                                    content: Text("Are You Sure you want to Delete the product ?",
+                                    style: TextStyle(
+                                      color: Colors.red
+                                    ),),
+                                    actions: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          MaterialButton(
+                                            color:Colors.blue.shade200,
+                                            child: Text("Yes",
+                                            style: TextStyle(
+                                              color: Colors.black
+                                            ),
+                                            ),
+
+                                              onPressed: (){
+
+                                          }
+                                          ),
+                                          MaterialButton(
+                                              color:Colors.blue.shade200,
+                                              child:Text("NO",
+                                              style: TextStyle(
+                                                color: Colors.black
+                                              ),),
+                                              onPressed: (){
+
+                                          })
+
+                                        ],
+                                      )
+                                    ],
+                                  );
+                                });
+
+                            }),
 
 
                           ),
