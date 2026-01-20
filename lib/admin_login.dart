@@ -50,7 +50,7 @@ class _AdminlogState extends State<Adminlog> {
           padding: const EdgeInsets.all(8.0),
           child: Center(
             child: Container(
-              height: 600,
+              height: 700,
               width: 600,
               color: Colors.grey.shade200,
               child: Center(
@@ -101,18 +101,22 @@ class _AdminlogState extends State<Adminlog> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              //color: Colors.blueGrey.shade800,
-                              width: 250,
+                            child: Card(
+                              elevation: 10,
+                              shadowColor: Colors.black,
+                              child: Container(
+                                //color: Colors.blueGrey.shade800,
+                                width: 250,
 
-                              decoration: BoxDecoration(
-                                  color: Colors.blueGrey.shade200,
-                                  borderRadius: BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))
-                              ),
-                              child: TextField(
-                                controller: admin,
-                                decoration: InputDecoration(
-                                    hintText: "Username"
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))
+                                ),
+                                child: TextField(
+                                  controller: admin,
+                                  decoration: InputDecoration(
+                                      hintText: "Username"
+                                  ),
                                 ),
                               ),
                             ),
@@ -139,18 +143,22 @@ class _AdminlogState extends State<Adminlog> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              //color: Colors.blueGrey.shade800,
-                              width: 250,
+                            child: Card(
+                              elevation: 10,
+                              shadowColor: Colors.black,
+                              child: Container(
+                                //color: Colors.blueGrey.shade800,
+                                width: 250,
 
-                              decoration: BoxDecoration(
-                                  color: Colors.blueGrey.shade200,
-                                  borderRadius: BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))
-                              ),
-                              child: TextField(
-                                controller: pass,
-                                decoration: InputDecoration(
-                                    hintText: "Password"
+                                decoration: BoxDecoration(
+                                    color: Colors.grey.shade200,
+                                    borderRadius: BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10))
+                                ),
+                                child: TextField(
+                                  controller: pass,
+                                  decoration: InputDecoration(
+                                      hintText: "Password"
+                                  ),
                                 ),
                               ),
                             ),

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart ' as firebase_storage;
@@ -29,7 +28,6 @@ class _NewProductState extends State<NewProduct> {
   List<String> wishProductIds = [];
 
   bool hasSize = false;
-
 
   Future imageUploded(File path)async{
     final  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
@@ -62,10 +60,8 @@ class _NewProductState extends State<NewProduct> {
       "catogary" : catgry.text,
       "Image" : image,
       "Stock" : stk.text,
-
       "hasSize": hasSize,
-
-
+      "productId" : product.id,
     };
     await product.add(Data);
 
@@ -73,293 +69,295 @@ class _NewProductState extends State<NewProduct> {
 
  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.indigo,
-        title: Center(
-          child: Text("New Product",
-          style: TextStyle(
-            color: Colors.white
-          ),),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.indigo,
+          title: Center(
+            child: Text("New Product",
+            style: TextStyle(
+              color: Colors.white
+            ),),
+          ),
         ),
-      ),
-      body: SizedBox(
-        height: 790,
-        child: ListView(
-          scrollDirection: Axis.vertical,
-          children: [
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: Container(
-              width: 200,
-              height: 40,
-              color: Colors.grey.shade200,
-               child: Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: Text("Upload image",
-                 style: TextStyle(
-                   color: Colors.black
-                 ),),
-               ),
-                     ),
-           ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    onTap: ()async{
-                      final pikeedimage = await ImagePicker().pickImage(
-                          source: ImageSource.gallery);
-                      if(pikeedimage==null){
-                        return;
-                      }
-                      else{
-                        File path = File(pikeedimage.path);
-                         await imageUploded(path);
-                        setState(() {
-
-                        });
-                      }
-                    },
-                    child: Container(
-                      color: Colors.grey.shade400,
-                      width: 100,
-                      height: 100,
-                      child: image !=null?
-                      Image(image: NetworkImage(image!.toString())):
-                      Text('no image'),
-                    ),
-                  ),
-                ),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 100,
-                height: 40,
-                //color: Colors.blue,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Product Name",
-                    style: TextStyle(
-                    color: Colors.black
-                  ),),
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 100,
+        body: SizedBox(
+          height: 790,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: [
+             Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: Container(
+                width: 200,
                 height: 40,
                 color: Colors.grey.shade200,
-                child:  TextField(
-                  controller: name,
-                  decoration: InputDecoration(
-                    hintText: "Product name",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 100,
-                height: 40,
-                //color: Colors.blue,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Product discription",
-                    style: TextStyle(
-                        color: Colors.black
-                    ),),
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 100,
-                height: 90,
-                color: Colors.grey.shade200,
-                child:  TextField(
-                  controller: disc,
-                  decoration: InputDecoration(
-                    hintText: "Product discription",
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 100,
-                height: 40,
-                //color: Colors.blue,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Catogary",
-                    style: TextStyle(
-                        color: Colors.black
-                    ),),
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 100,
-                height: 40,
-                color: Colors.grey.shade200,
-                child:  TextField(
-                  controller: catgry,
-                  decoration: InputDecoration(
-                    hintText: "Product catogary",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-       Padding(
-         padding: const EdgeInsets.all(8.0),
-         child: Container(
-           width: 200,
-           height: 100,
-           child:DropdownButtonFormField<String>(
-             decoration: InputDecoration(
-               labelText: "Select  Size",
-               border: OutlineInputBorder(),
+                 child: Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Text("Upload image",
+                   style: TextStyle(
+                     color: Colors.black
+                   ),),
+                 ),
+                       ),
              ),
-             value: SelectedSize,
-             items: Size.map((e) {
-               return DropdownMenuItem(
-                 value: e,
-                 child: Text(e),
-               );
-             }).toList(),
-             onChanged: (value) {
-               setState(() {
-                 SelectedSize = value!;
-               });
-             },
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: ()async{
+                        final pikeedimage = await ImagePicker().pickImage(
+                            source: ImageSource.gallery);
+                        if(pikeedimage==null){
+                          return;
+                        }
+                        else{
+                          File path = File(pikeedimage.path);
+                           await imageUploded(path);
+                          setState(() {
 
-           )
-         ),
-       ),
-
-       Container(
-         height: 100,
-         width: 200,
-         child:  SizedBox(
-           width: 100,
-           child: Row(
-             mainAxisAlignment: MainAxisAlignment.start,
-             crossAxisAlignment: CrossAxisAlignment.start,
-             children: [
-               Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: Container(
-                   width: 115,
-                   height: 40,
-                   child: Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Text("Product Price",
-                       style: TextStyle(
-                           color: Colors.black
-                       ),),
-                   ),
-                 ),
-               ),
-               Container(
-                   width: 50,
-                   height: 40,
-                   color: Colors.grey.shade200,
-                   child: TextField(
-                     controller: price,
-
-
-                   )
-               ),
-               Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: Container(
-                   width: 100,
-                   height: 40,
-                   child: Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Text("Stock",
-                       style: TextStyle(
-                           color: Colors.black
-                       ),),
-                   ),
-                 ),
-               ),
-               Container(
-                   width: 30,
-                   height: 40,
-                   color: Colors.grey.shade200,
-                   child: TextField(
-                     controller: stk,
-                   )
-               ),
-             ],
-           ),
-         ),
-       ),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SwitchListTile(
-                title: const Text("Does this product have size?"),
-                value: hasSize,
-                onChanged: (value) {
-                  setState(() {
-                    hasSize = value;
-                  });
-                },
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MaterialButton(
-                  child: Center(
-                    child: Text("Add Product",
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
+                          });
+                        }
+                      },
+                      child: Container(
+                        color: Colors.grey.shade400,
+                        width: 100,
+                        height: 100,
+                        child: image !=null?
+                        Image(image: NetworkImage(image!.toString())):
+                        Text('no image'),
+                      ),
                     ),
                   ),
-                  color: Colors.indigo,
-                  onPressed: (){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: Colors.green,
-                            content: Text("product Added Successfully",
-                            style: TextStyle(
-                              color: Colors.white
-                            ),)
-                        )
-                    );
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 100,
+                  height: 40,
+                  //color: Colors.blue,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Product Name",
+                      style: TextStyle(
+                      color: Colors.black
+                    ),),
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 100,
+                  height: 40,
+                  color: Colors.grey.shade200,
+                  child:  TextField(
+                    controller: name,
+                    decoration: InputDecoration(
+                      hintText: "Product name",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 100,
+                  height: 40,
+                  //color: Colors.blue,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Product discription",
+                      style: TextStyle(
+                          color: Colors.black
+                      ),),
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 100,
+                  height: 90,
+                  color: Colors.grey.shade200,
+                  child:  TextField(
+                    controller: disc,
+                    decoration: InputDecoration(
+                      hintText: "Product discription",
+                    ),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 100,
+                  height: 40,
+                  //color: Colors.blue,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Catogary",
+                      style: TextStyle(
+                          color: Colors.black
+                      ),),
+                  ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: 100,
+                  height: 40,
+                  color: Colors.grey.shade200,
+                  child:  TextField(
+                    controller: catgry,
+                    decoration: InputDecoration(
+                      hintText: "Product catogary",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+         Padding(
+           padding: const EdgeInsets.all(8.0),
+           child: Container(
+             width: 200,
+             height: 100,
+             child:DropdownButtonFormField<String>(
+               decoration: InputDecoration(
+                 labelText: "Select  Size",
+                 border: OutlineInputBorder(),
+               ),
+               value: SelectedSize,
+               items: Size.map((e) {
+                 return DropdownMenuItem(
+                   value: e,
+                   child: Text(e),
+                 );
+               }).toList(),
+               onChanged: (value) {
+                 setState(() {
+                   SelectedSize = value!;
+                 });
+               },
+
+             )
+           ),
+         ),
+
+         Container(
+           height: 100,
+           width: 200,
+           child:  SizedBox(
+             width: 100,
+             child: Row(
+               mainAxisAlignment: MainAxisAlignment.start,
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Container(
+                     width: 115,
+                     height: 40,
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Text("Product Price",
+                         style: TextStyle(
+                             color: Colors.black
+                         ),),
+                     ),
+                   ),
+                 ),
+                 Container(
+                     width: 50,
+                     height: 40,
+                     color: Colors.grey.shade200,
+                     child: TextField(
+                       controller: price,
+
+
+                     )
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Container(
+                     width: 100,
+                     height: 40,
+                     child: Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: Text("Stock",
+                         style: TextStyle(
+                             color: Colors.black
+                         ),),
+                     ),
+                   ),
+                 ),
+                 Container(
+                     width: 30,
+                     height: 40,
+                     color: Colors.grey.shade200,
+                     child: TextField(
+                       controller: stk,
+                     )
+                 ),
+               ],
+             ),
+           ),
+         ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SwitchListTile(
+                  title: const Text("Does this product have size?"),
+                  value: hasSize,
+                  onChanged: (value) {
                     setState(() {
-                      Adddata();
+                      hasSize = value;
                     });
-                  }),
-            )
-        ]
-        ),
-      ) ,
+                  },
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: MaterialButton(
+                    child: Center(
+                      child: Text("Add Product",
+                      style: TextStyle(
+                        color: Colors.white
+                      ),
+                      ),
+                    ),
+                    color: Colors.indigo,
+                    onPressed: (){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: Colors.green,
+                              content: Text("product Added Successfully",
+                              style: TextStyle(
+                                color: Colors.white
+                              ),)
+                          )
+                      );
+                      setState(() {
+                        Adddata();
+                      });
+                    }),
+              )
+          ]
+          ),
+        ) ,
+      ),
     );
   }
 }

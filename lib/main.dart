@@ -33,7 +33,7 @@ class _CountState extends State<Count> {
     ],
     child:   MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Bottom(),
+      home: Adminlog(),                          //  home
 
 
       routes: {
@@ -79,98 +79,100 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.indigo,
-        title: Center(
-          child: Text("My Market",
-            style: TextStyle(
-                color: Colors.white
-            ),),
-        ),
-        actions: [
-          IconButton(onPressed: (){
-            setState(() {
-              Signout();
-              Navigator.push(context, MaterialPageRoute(builder: (context){
-                return Adminlog();
-              }
-              )
-              );
-            });
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.indigo,
+          title: Center(
+            child: Text("My Market",
+              style: TextStyle(
+                  color: Colors.white
+              ),),
+          ),
+          actions: [
+            IconButton(onPressed: (){
+              setState(() {
+                Signout();
+                Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return Adminlog();
+                }
+                )
+                );
+              });
 
-          }, icon: Icon(Icons.logout,color: Colors.white,))
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: StreamBuilder(
-          stream: credential.snapshots(),
-          builder: (context, snapshot) {
-            if(snapshot.hasData) {
-              int userCount = snapshot.data!.docs.length;
-              return Container(
-                width: 999,
-                height: 600,
-                color: Colors.white,
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: [
-                    Container(
-                        width: 300,
-                        height: 40,
-                        // color: Colors.yellow,
-                        child: ListTile(
-                          leading: Icon(Icons.people,
-                            color: Colors.blue,),
-                          title: Text("Users",
-                            style: TextStyle(color: Colors.black),),
-                          trailing: Text(userCount.toString(),
-                            style: TextStyle(
-                                color: Colors.black
-                            ),),
-                        )
-                    ),
-                    SizedBox(
-                      height: 510,
-                      child: ListView.builder(
-                          itemCount: snapshot.data!.docs.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, int index) {
-                            final snap =  snapshot.data!.docs[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                color: Colors.grey.shade200,
-                                child: ListTile(
-                                  leading: CircleAvatar(
-                                    backgroundImage: NetworkImage(snap["Image"]),
+            }, icon: Icon(Icons.logout,color: Colors.white,))
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: StreamBuilder(
+            stream: credential.snapshots(),
+            builder: (context, snapshot) {
+              if(snapshot.hasData) {
+                int userCount = snapshot.data!.docs.length;
+                return Container(
+                  width: 999,
+                  height: 600,
+                  color: Colors.white,
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: [
+                      Container(
+                          width: 300,
+                          height: 40,
+                          // color: Colors.yellow,
+                          child: ListTile(
+                            leading: Icon(Icons.people,
+                              color: Colors.blue,),
+                            title: Text("Users",
+                              style: TextStyle(color: Colors.black),),
+                            trailing: Text(userCount.toString(),
+                              style: TextStyle(
+                                  color: Colors.black
+                              ),),
+                          )
+                      ),
+                      SizedBox(
+                        height: 510,
+                        child: ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            scrollDirection: Axis.vertical,
+                            itemBuilder: (context, int index) {
+                              final snap =  snapshot.data!.docs[index];
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  color: Colors.grey.shade200,
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundImage: NetworkImage(snap["Image"]),
+
+                                    ),
+                                    title: Text(snap["Name"],
+                                      style: TextStyle(color: Colors.black),),
+                                    subtitle: Text(snap["email"],
+                                      style: TextStyle(
+                                          color: Colors.black
+                                      ),),
+
 
                                   ),
-                                  title: Text(snap["Name"],
-                                    style: TextStyle(color: Colors.black),),
-                                  subtitle: Text(snap["email"],
-                                    style: TextStyle(
-                                        color: Colors.black
-                                    ),),
-
-
                                 ),
-                              ),
-                            );
-                          }),
-                    )
+                              );
+                            }),
+                      )
 
 
-                  ],
-                ),
-              );
-            } return CircularProgressIndicator();
-          }
+                    ],
+                  ),
+                );
+              } return CircularProgressIndicator();
+            }
+          ),
         ),
+
+
       ),
-
-
     );
   }
 }
